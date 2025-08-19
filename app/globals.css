@@ -1,26 +1,37 @@
 @import "tailwindcss";
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
-
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+  --font-stack: var(--font-nanum), system-ui, -apple-system, "Segoe UI", Roboto,
+    "Helvetica Neue", Arial;
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: var(--font-stack);
+}
+
+@layer base {
+  button {
+    cursor: pointer;
+  }
+  input {
+    @apply outline-none;
+  }
+}
+
+@layer components {
+  .custom-shadow {
+    @apply border-2 border-slate-900 shadow-[4px_4px_0_#0F172A];
+  }
+  .btn-image {
+    @apply w-4 h-4 bg-no-repeat bg-center bg-contain;
+  }
+  .default-section {
+    @apply flex py-16 justify-center items-center flex-col gap-6;
+  }
+  .default-bg {
+    @apply w-[240px] h-[240px] bg-no-repeat bg-center bg-contain;
+  }
+  .default-text {
+    @apply text-center text-slate-400 font-bold;
+  }
 }
