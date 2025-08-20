@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import "./globals.css";
 import TopNavigation from "@/components/top-nav";
 import localFont from "next/font/local";
+import { SWRProvider } from "./providers/swr-provider";
 
 // 추가: NanumSquare 로컬 폰트 (Regular, Bold)
 const nanum = localFont({
@@ -34,8 +35,12 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={`${nanum.variable} antialiased bg-gray-50`}>
-        <TopNavigation />
-        <div className="max-w-[1200px] mx-auto">{children}</div>
+        <SWRProvider>
+          <TopNavigation />
+          <div className="max-w-[1200px] mx-auto min-h-[calc(100vh-60px)]">
+            {children}
+          </div>
+        </SWRProvider>
       </body>
     </html>
   );

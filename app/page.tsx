@@ -1,6 +1,6 @@
 import TodoForm from "@/components/todo-form";
 import TodoList from "@/components/todo-list";
-import Done from "@/components/done";
+import Done from "@/components/done-list";
 
 export default function Home() {
   return (
