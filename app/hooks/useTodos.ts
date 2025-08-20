@@ -24,8 +24,8 @@ export function useTodos() {
     try {
       setActionLoading((prev) => ({ ...prev, adding: true }));
 
-      const newTodo = await todoAPI.createTodo(data);
-      await mutate(TODOS_KEY, [...todos, newTodo], false);
+      await todoAPI.createTodo(data);
+      await mutate(TODOS_KEY);
     } catch (err) {
       await mutate(TODOS_KEY);
       throw err;

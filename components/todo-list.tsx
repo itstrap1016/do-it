@@ -9,6 +9,7 @@ import ListItem from "./list-item";
 export default function TodoList() {
   const { todos, loading } = useTodos();
   const pending = todos.filter((t: TodoItem) => t.isCompleted === false);
+  console.log(pending);
 
   return (
     <section className="w-[588px]">

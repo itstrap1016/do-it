@@ -9,6 +9,7 @@ import ListItem from "./list-item";
 export default function DoneList() {
   const { todos, loading } = useTodos();
   const completed = todos.filter((t: TodoItem) => t.isCompleted === true);
+  console.log(completed);
 
   return (
     <section className="w-[588px]">
