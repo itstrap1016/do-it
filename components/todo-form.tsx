@@ -32,7 +32,7 @@ export default function TodoForm() {
       ></input>
       <Button
         text={"추가하기"}
-        disabled={loading.adding}
+        disabled={loading.adding || loading.getting}
         loading={loading.adding}
         bgColor={todos.length > 0 ? "bg-slate-200" : "bg-violet-600"}
         textColor={todos.length > 0 ? "text-slate-900" : "text-white"}

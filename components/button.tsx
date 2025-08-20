@@ -15,7 +15,7 @@ export default function Button({
 }: ButtonProps) {
   return (
     <button
-      className={`flex items-center gap-1 w-[168px] h-[52px] custom-shadow rounded-2xl justify-center ${bgColor}`}
+      className={`flex items-center gap-1 w-[168px] h-[52px] custom-shadow rounded-full justify-center ${bgColor}`}
       disabled={disabled}
     >
       {text === "추가하기" &&

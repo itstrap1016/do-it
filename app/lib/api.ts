@@ -14,6 +14,13 @@ export interface CreateTodoRequest {
   name: string;
 }
 
+export interface UpdateTodoRequest {
+  name?: string;
+  isCompleted?: boolean;
+  memo?: string;
+  imageUrl?: string;
+}
+
 // 공통 fetch 래퍼
 async function apiRequest<T>(url: string, options?: RequestInit): Promise<T> {
   const response = await fetch(`${BASE_URL}${url}`, {
@@ -47,5 +54,12 @@ export const todoAPI = {
   deleteTodo: (id: number): Promise<void> =>
     apiRequest(`/${API_ID}/items/${id}`, {
       method: "DELETE",
+    }),
+
+  // 할 일 업데이트 추가
+  updateTodo: (id: number, data: UpdateTodoRequest): Promise<TodoItem> =>
+    apiRequest(`/${API_ID}/items/${id}`, {
+      method: "PATCH",
+      body: JSON.stringify(data),
     }),
 };

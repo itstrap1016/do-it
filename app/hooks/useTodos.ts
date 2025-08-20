@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import useSWR, { mutate } from "swr";
-import { todoAPI, CreateTodoRequest } from "../lib/api";
+import { todoAPI, CreateTodoRequest, UpdateTodoRequest } from "../lib/api";
 
 const TODOS_KEY = "todos";
 
@@ -19,6 +19,7 @@ export function useTodos() {
     mutate: refreshTodos,
   } = useSWR(TODOS_KEY, todoAPI.getTodos);
 
+  // 할 일 추가 함수
   const addTodo = async (data: CreateTodoRequest) => {
     try {
       setActionLoading((prev) => ({ ...prev, adding: true }));
@@ -33,6 +34,25 @@ export function useTodos() {
     }
   };
 
+  // 할 일 업데이트 함수
+  const updateTodo = async (id: number, data: UpdateTodoRequest) => {
+    try {
+      const optimisticData = todos.map((todo) =>
+        todo.id === id ? { ...todo, ...data } : todo
+      );
+      await mutate(TODOS_KEY, optimisticData, false);
+      const updatedTodo = await todoAPI.updateTodo(id, data);
+      await mutate(
+        TODOS_KEY,
+        todos.map((todo) => (todo.id === id ? updatedTodo : todo)),
+        false
+      );
+    } catch (err) {
+      await mutate(TODOS_KEY);
+      throw err;
+    }
+  };
+
   return {
     todos,
     loading: {
@@ -42,5 +62,6 @@ export function useTodos() {
     error,
     addTodo,
     refreshTodos,
+    updateTodo,
   };
 }
