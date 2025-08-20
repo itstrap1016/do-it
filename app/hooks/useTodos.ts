@@ -37,10 +37,6 @@ export function useTodos() {
   // 할 일 업데이트 함수
   const updateTodo = async (id: number, data: UpdateTodoRequest) => {
     try {
-      const optimisticData = todos.map((todo) =>
-        todo.id === id ? { ...todo, ...data } : todo
-      );
-      await mutate(TODOS_KEY, optimisticData, false);
       const updatedTodo = await todoAPI.updateTodo(id, data);
       await mutate(
         TODOS_KEY,

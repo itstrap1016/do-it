@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import Image from "next/image";
 import { TodoItem } from "@/app/lib/api";
 import { useTodos } from "@/app/hooks/useTodos";
@@ -9,7 +10,10 @@ export default function TodoList() {
   const { todos, loading, updateTodo } = useTodos();
   const pending = todos.filter((t: TodoItem) => t.isCompleted === false);
 
-  const handleCheckboxChange = async (item: TodoItem) => {
+  const handleCheckbox = async (item: TodoItem, e: React.MouseEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+
     try {
       await updateTodo(item.id, { isCompleted: !item.isCompleted });
     } catch (err) {
@@ -38,24 +42,27 @@ export default function TodoList() {
           ) : (
             <ul className="mt-4 flex flex-col gap-4">
               {pending.map((item: TodoItem) => (
-                <li
-                  key={item.id}
-                  className="flex items-center gap-4 px-3 py-2 bg-white rounded-full border-2 border-slate-900"
-                >
-                  <div className="relative">
-                    <input
-                      type="checkbox"
-                      id={`todo-${item.id}`}
-                      checked={item.isCompleted}
-                      onChange={() => handleCheckboxChange(item)}
-                      className="sr-only"
-                    />
-                    <label
-                      htmlFor={`todo-${item.id}`}
-                      className="flex items-center justify-center w-8 h-8 rounded-full border-2 border-slate-900 cursor-pointer bg-yellow-50"
-                    />
-                  </div>
-                  <span className="flex-1 text-slate-800">{item.name}</span>
+                <li key={item.id}>
+                  <Link
+                    href={`/detail/${item.id}`}
+                    className="flex items-center gap-4 px-3 py-2 bg-white rounded-full border-2 border-slate-900"
+                  >
+                    <div>
+                      <input
+                        type="checkbox"
+                        id={`todo-${item.id}`}
+                        checked={item.isCompleted}
+                        onChange={() => {}}
+                        className="sr-only"
+                      />
+                      <label
+                        htmlFor={`todo-${item.id}`}
+                        className="flex items-center justify-center w-8 h-8 rounded-full border-2 border-slate-900 cursor-pointer bg-yellow-50"
+                        onClick={(e) => handleCheckbox(item, e)}
+                      />
+                    </div>
+                    <span className="flex-1 text-slate-800">{item.name}</span>
+                  </Link>
                 </li>
               ))}
             </ul>
