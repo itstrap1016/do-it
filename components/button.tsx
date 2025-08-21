@@ -30,11 +30,6 @@ export default function Button({
         textColor === "text-slate-900" && (
           <span className="bg-[url('/navy-plus.svg')] btn-image"></span>
         )}
-      {text === "추가하기" &&
-        bgColor === "bg-slate-200" &&
-        textColor === "text-slate-900" && (
-          <span className="bg-[url('/navy-plus.svg')] btn-image"></span>
-        )}
       {text === "수정 완료" && (
         <span className="bg-[url('/edit-check.svg')] btn-image"></span>
       )}
