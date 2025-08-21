@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { TodoItem, todoAPI } from "@/app/lib/api";
+import { useTodos } from "@/app/hooks/useTodos";
 import DetailCheck from "@/components/detail-check";
 import ImageInput from "@/components/image-input";
 import Memo from "@/components/memo";
@@ -17,6 +18,7 @@ export default function TodoDetailForm({
   const [isLoading, setIsLoading] = useState(false);
   const [wasEdited, setWasEdited] = useState(false);
   const [todoData, setTodoData] = useState(initialTodo);
+  const { refreshTodos } = useTodos();
 
   // 수정 함수
   const handleUpdate = async () => {
@@ -34,6 +36,7 @@ export default function TodoDetailForm({
         imageUrl: todoData.imageUrl,
       });
       setWasEdited(true);
+      refreshTodos();
       router.push("/");
     } catch (err) {
       alert(err);
@@ -49,6 +52,7 @@ export default function TodoDetailForm({
     setIsLoading(true);
     try {
       await todoAPI.deleteTodo(todoData.id);
+      refreshTodos();
       router.push("/");
     } catch (err) {
       alert(err);
