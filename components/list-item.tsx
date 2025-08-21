@@ -62,10 +62,7 @@ export default function ListItem({ item, variant }: ListItemProps) {
           />
           <label
             htmlFor={`${variant}-${item.id}`}
-            className={`
-                  flex items-center justify-center w-8 h-8 rounded-full cursor-pointer
-                  ${currentStyle.checkboxBg} ${currentStyle.checkboxBorder}
-                `}
+            className={`check-btn ${currentStyle.checkboxBg} ${currentStyle.checkboxBorder}`}
             onClick={(e) => handleCheckbox(item, e)}
           >
             {currentStyle.icon && (

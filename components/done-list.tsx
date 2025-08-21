@@ -12,7 +12,7 @@ export default function DoneList() {
   console.log(completed);
 
   return (
-    <section className="w-[588px]">
+    <section className="list">
       <h3>
         <Image src="/done.png" width={97} height={36} alt="done" />
       </h3>

@@ -22,7 +22,10 @@ export default function TodoForm() {
   };
 
   return (
-    <form className="py-6 pb-10 flex gap-4" onSubmit={handleSubmit}>
+    <form
+      className="py-6 pb-10 flex gap-4 max-sm:gap-2 max-sm:pt-4 max-sm:pb-6"
+      onSubmit={handleSubmit}
+    >
       <input
         value={inputValue}
         onChange={(e) => setInputValue(e.target.value)}

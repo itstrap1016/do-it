@@ -12,7 +12,7 @@ export default function TodoList() {
   console.log(pending);
 
   return (
-    <section className="w-[588px]">
+    <section className="list">
       <h3>
         <Image src="/todo.png" width={101} height={36} alt="to-do" />
       </h3>
