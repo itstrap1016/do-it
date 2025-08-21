@@ -1,26 +1,30 @@
-import DetailCheck from "@/components/detail-check";
-import ImageInput from "@/components/image-input";
-import Memo from "@/components/memo";
-import Button from "@/components/button";
+// app/detail/[id]/page.tsx
+import TodoDetailForm from "@/components/todo-detail-form";
+import { todoAPI } from "@/app/lib/api";
+import { notFound } from "next/navigation";
 
-export default function Detail() {
-  return (
-    <section className="bg-white w-full min-h-[calc(100vh-60px)] pt-6 px-[102px]">
-      <h2 className="sr-only">ToDo 상세 페이지</h2>
-      <DetailCheck />
-      <section className="flex gap-6 mt-6">
-        <ImageInput />
-        <Memo />
-      </section>
-      <section className="mt-6 flex justify-end gap-4">
-        <h3 className="sr-only">수정, 삭제 버튼</h3>
-        <Button
-          text="수정 완료"
-          bgColor="bg-slate-200"
-          textColor="text-slate-900"
-        />
-        <Button text="삭제하기" bgColor="bg-red-500" textColor="text-white" />
-      </section>
-    </section>
-  );
+interface DetailPageParams {
+  params: {
+    id: string;
+  };
+}
+
+export default async function DetailPage({ params }: DetailPageParams) {
+  const resolvedParams = await params;
+  const id = Number(resolvedParams.id);
+
+  // 서버에서 데이터 가져오기
+  try {
+    const todo = await todoAPI.getTodoById(id);
+
+    if (!todo) {
+      notFound(); // 404 페이지로 리디렉션
+    }
+
+    return <TodoDetailForm initialTodo={todo} />;
+  } catch (error) {
+    // 오류 처리
+    console.error(error);
+    return <div>Todo를 불러오는 중 오류가 발생했습니다.</div>;
+  }
 }

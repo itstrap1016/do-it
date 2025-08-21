@@ -4,6 +4,7 @@ interface ButtonProps {
   disabled?: boolean;
   bgColor: string;
   textColor: string;
+  onClick?: () => Promise<void>;
 }
 
 export default function Button({
@@ -12,6 +13,7 @@ export default function Button({
   disabled,
   bgColor,
   textColor,
+  onClick,
 }: ButtonProps) {
   return (
     <button
@@ -19,6 +21,7 @@ export default function Button({
         text === "추가하기" && "max-sm:w-13 max-sm:h-13"
       }`}
       disabled={disabled}
+      onClick={onClick ? onClick : () => {}}
     >
       {text === "추가하기" &&
         bgColor === "bg-violet-600" &&

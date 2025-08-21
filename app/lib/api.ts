@@ -21,6 +21,10 @@ export interface UpdateTodoRequest {
   imageUrl?: string;
 }
 
+interface ImageUploadResponse {
+  url: string;
+}
+
 // 공통 fetch 래퍼
 async function apiRequest<T>(url: string, options?: RequestInit): Promise<T> {
   const response = await fetch(`${BASE_URL}${url}`, {
@@ -62,4 +66,25 @@ export const todoAPI = {
       method: "PATCH",
       body: JSON.stringify(data),
     }),
+
+  getTodoById: (id: number): Promise<TodoItem> =>
+    apiRequest(`/${API_ID}/items/${id}`),
+
+  // 이미지 업로드
+  uploadImage: async (imageFile: File): Promise<string> => {
+    const formData = new FormData();
+    formData.append("image", imageFile);
+
+    const response = await fetch(`${BASE_URL}/${API_ID}/images/upload`, {
+      method: "POST",
+      body: formData,
+    });
+
+    if (!response.ok) {
+      throw new Error(`Image upload failed: ${response.status}`);
+    }
+
+    const data: ImageUploadResponse = await response.json();
+    return data.url;
+  },
 };
