@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { useTodos } from "@/app/hooks/useTodos";
-import Button from "./button";
+import Button from "../ui/button";
 
 export default function TodoForm() {
   const [inputValue, setInputValue] = useState("");

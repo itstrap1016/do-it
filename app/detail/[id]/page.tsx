@@ -25,6 +25,10 @@ export default async function DetailPage({ params }: DetailPageParams) {
   } catch (error) {
     // 오류 처리
     console.error(error);
-    return <div>Todo를 불러오는 중 오류가 발생했습니다.</div>;
+    return (
+      <div className="text-center py-4 text-bold text-slate-800">
+        Todo를 불러오는 중 오류가 발생했습니다.
+      </div>
+    );
   }
 }

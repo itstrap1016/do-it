@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import "./globals.css";
-import TopNavigation from "@/components/top-nav";
+import TopNavigation from "@/components/layout/top-nav";
 import localFont from "next/font/local";
 import { SWRProvider } from "./providers/swr-provider";
 

@@ -15,7 +15,8 @@ export default function TodoDetailForm({
   initialTodo: TodoItem;
 }) {
   const router = useRouter();
-  const [isLoading, setIsLoading] = useState(false);
+  const [isEditLoading, setIsEditLoading] = useState(false);
+  const [isDeleteLoading, setIsDeleteLoading] = useState(false);
   const [wasEdited, setWasEdited] = useState(false);
   const [todoData, setTodoData] = useState(initialTodo);
   const { refreshTodos } = useTodos();
@@ -26,22 +27,21 @@ export default function TodoDetailForm({
       alert("할 일 이름을 입력해주세요.");
       return;
     }
-
-    setIsLoading(true);
+    setIsEditLoading(true);
     try {
       await todoAPI.updateTodo(todoData.id, {
-        name: todoData.name,
+        name: todoData.name || "",
         isCompleted: todoData.isCompleted,
-        memo: todoData.memo,
-        imageUrl: todoData.imageUrl,
+        memo: todoData.memo || "",
+        imageUrl: todoData.imageUrl || "",
       });
       setWasEdited(true);
-      refreshTodos();
+      await refreshTodos();
       router.push("/");
     } catch (err) {
       alert(err);
     } finally {
-      setIsLoading(false);
+      setIsEditLoading(false);
     }
   };
 
@@ -49,15 +49,15 @@ export default function TodoDetailForm({
   const handleDelete = async () => {
     if (!confirm("정말 삭제하시겠습니까?")) return;
 
-    setIsLoading(true);
+    setIsDeleteLoading(true);
     try {
       await todoAPI.deleteTodo(todoData.id);
-      refreshTodos();
+      await refreshTodos();
       router.push("/");
     } catch (err) {
       alert(err);
     } finally {
-      setIsLoading(false);
+      setIsDeleteLoading(false);
     }
   };
 
@@ -96,16 +96,16 @@ export default function TodoDetailForm({
           text="수정 완료"
           bgColor={wasEdited ? "bg-lime-300" : "bg-slate-200"}
           textColor="text-slate-900"
-          loading={isLoading}
-          disabled={isLoading}
+          loading={isEditLoading}
+          disabled={isEditLoading}
           onClick={handleUpdate}
         />
         <Button
           text="삭제하기"
           bgColor="bg-red-500"
           textColor="text-white"
-          loading={isLoading}
-          disabled={isLoading}
+          loading={isDeleteLoading}
+          disabled={isDeleteLoading}
           onClick={handleDelete}
         />
       </section>
