@@ -35,7 +35,7 @@ export default function TodoContainer() {
   };
 
   return (
-    <>
+    <section className="max-[1248px]:px-6 max-sm:px-4">
       <TodoForm onSubmit={handleAddTodo} isLoading={loading.adding} />
 
       <section className="flex gap-6 max-md:flex-col max-md:pb-6 max-md:gap-12">
@@ -63,6 +63,6 @@ export default function TodoContainer() {
           }}
         />
       </section>
-    </>
+    </section>
   );
 }

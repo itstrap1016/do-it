@@ -37,7 +37,7 @@ export default function RootLayout({
       <body className={`${nanum.variable} antialiased bg-gray-50`}>
         <SWRProvider>
           <TopNavigation />
-          <div className="max-w-[1200px] mx-auto min-h-[calc(100vh-60px)] max-[1248px]:px-6 max-[1248px]:mx-0 max-sm:px-4">
+          <div className="max-w-[1200px] mx-auto min-h-[calc(100vh-60px)] max-[1248px]:mx-0">
             {children}
           </div>
         </SWRProvider>

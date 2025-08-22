@@ -14,7 +14,7 @@ export default function DetailActions({
   onDelete,
 }: DetailActionsProps) {
   return (
-    <div className="flex gap-3 mt-6 justify-end">
+    <div className="flex gap-4 mt-6 justify-end max-lg:justify-center max-sm:gap-2">
       <Button
         text="수정 완료"
         bgColor={isEditLoading ? "bg-slate-200" : "bg-lime-300"}

@@ -18,7 +18,7 @@ export default function Memo({ memo, onMemoChange }: MemoProps) {
   };
 
   return (
-    <section className="w-[588px] h-[311px] rounded-3xl relative bg-[url('/active/memo.png')] bg-no-repeat bg-cover bg-center p-6 relative">
+    <section className="w-[588px] h-[311px] rounded-3xl relative bg-[url('/active/memo.png')] bg-no-repeat bg-cover bg-center p-6 relative max-lg:w-full">
       <h3 className="text-center text-amber-800 font-bold mb-4">Memo</h3>
       {isEditing ? (
         <textarea

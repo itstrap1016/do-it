@@ -10,8 +10,9 @@ interface DetailPageParams {
 
 export default async function DetailPage({ params }: DetailPageParams) {
   try {
-    const id = Number(params.id);
-    const todo = await todoAPI.getTodoById(id);
+    const { id } = await params;
+    const todoId = Number(id);
+    const todo = await todoAPI.getTodoById(todoId);
 
     if (!todo) {
       notFound();

@@ -49,7 +49,7 @@ export default function DetailCheck({
         <input
           value={name}
           onChange={(e) => onNameChange(e.target.value)}
-          className="text-xl font-bold text-slate-900 underline text-center w-[300px]"
+          className="text-xl font-bold text-slate-900 underline text-center w-[300px] max-md:w-[150px]"
         />
       </div>
     </section>

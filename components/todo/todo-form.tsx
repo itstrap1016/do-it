@@ -35,10 +35,10 @@ export default function TodoForm({ onSubmit, isLoading }: TodoFormProps) {
       />
       <Button
         text="추가하기"
-        disabled={isLoading || !inputValue.trim()} // 수정
+        disabled={isLoading || !inputValue.trim()}
         loading={isLoading}
-        bgColor={isLoading ? "bg-slate-200" : "bg-violet-600"} // 수정
-        textColor={isLoading ? "text-slate-900" : "text-white"} // 수정
+        bgColor={isLoading ? "bg-slate-200" : "bg-violet-600"}
+        textColor={isLoading ? "text-slate-900" : "text-white"}
       />
     </form>
   );

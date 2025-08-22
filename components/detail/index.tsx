@@ -23,7 +23,7 @@ export default function TodoDetailView({
   onDelete,
 }: TodoDetailViewProps) {
   return (
-    <section className="w-full min-h-[calc(100vh-60px)] pt-6 px-[102px] bg-white">
+    <section className="w-full min-h-[calc(100vh-60px)] py-6 px-[102px] bg-white max-[1248px]:px-6 max-sm:p-4">
       <h2 className="sr-only">ToDo 상세 페이지</h2>
 
       <DetailHeader

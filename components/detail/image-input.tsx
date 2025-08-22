@@ -89,7 +89,7 @@ export default function ImageInput({
 
   return (
     <section
-      className={`w-[384px] h-[311px] rounded-3xl relative flex flex-col justify-center items-center image-fade flex-shrink-0 ${
+      className={`w-[384px] h-[311px] rounded-3xl relative flex flex-col justify-center items-center image-fade flex-shrink-0 max-lg:w-full ${
         displayImage
           ? "bg-cover bg-center bg-no-repeat"
           : "border-2 border-dashed border-slate-300 bg-slate-50"
