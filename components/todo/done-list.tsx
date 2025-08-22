@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import { TodoItem } from "@/app/lib/api";
-import { useTodos } from "@/app/hooks/useTodos";
+import { useTodos } from "@/app/hooks/use-todos";
 import Loading from "../ui/loading";
 import ListItem from "./list-item";
 

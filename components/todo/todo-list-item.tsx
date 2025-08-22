@@ -4,7 +4,7 @@
 import Link from "next/link";
 import Image from "next/image";
 import { TodoItem } from "@/app/lib/api";
-import { useTodos } from "@/app/hooks/useTodos";
+import { useTodos } from "@/app/hooks/use-todos";
 
 interface ListItemProps {
   item: TodoItem;

@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { useTodos } from "@/app/hooks/useTodos";
+import { useTodos } from "@/app/hooks/use-todos";
 import Button from "../ui/button";
 
 export default function TodoForm() {

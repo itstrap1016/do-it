@@ -4,7 +4,7 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { TodoItem, todoAPI } from "@/app/lib/api";
-import { useTodos } from "./useTodos";
+import { useTodos } from "./use-todos";
 
 export function useTodoDetail(initialTodo: TodoItem) {
   const router = useRouter();
