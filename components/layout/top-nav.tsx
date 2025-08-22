@@ -8,7 +8,7 @@ export default function TopNavigation() {
         <h1>
           <Link href="/">
             <Image
-              src="/logo.svg"
+              src="/active/logo.svg"
               alt="Logo"
               width={151}
               height={40}

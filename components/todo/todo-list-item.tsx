@@ -1,81 +1,62 @@
-// components/list-item.tsx
 "use client";
 
+import { useState } from "react";
 import Link from "next/link";
-import Image from "next/image";
 import { TodoItem } from "@/app/lib/api";
-import { useTodos } from "@/app/hooks/use-todos";
 
-interface ListItemProps {
+interface TodoListItemProps {
   item: TodoItem;
-  variant: "todo" | "done";
+  onToggleComplete: (id: number, isCompleted: boolean) => Promise<boolean>;
 }
 
-const styles = {
-  todo: {
-    background: "bg-white",
-    checkboxBg: "bg-yellow-50",
-    checkboxBorder: "border-2 border-slate-900",
-    textStyle: "text-slate-800",
-    icon: null,
-  },
-  done: {
-    background: "bg-violet-100",
-    checkboxBg: "",
-    checkboxBorder: "",
-    textStyle: "text-slate-800 line-through",
-    icon: "/check.svg",
-  },
-};
+export default function TodoListItem({
+  item,
+  onToggleComplete,
+}: TodoListItemProps) {
+  const [isUpdating, setIsUpdating] = useState(false);
 
-export default function ListItem({ item, variant }: ListItemProps) {
-  const { updateTodo } = useTodos();
-
-  const handleCheckbox = async (item: TodoItem, e: React.MouseEvent) => {
+  const handleToggle = async (e: React.MouseEvent) => {
     e.preventDefault();
-    e.stopPropagation();
+    if (isUpdating) return;
+
+    setIsUpdating(true);
     try {
-      await updateTodo(item.id, { isCompleted: !item.isCompleted });
-    } catch (err) {
-      alert(err);
+      await onToggleComplete(item.id, !item.isCompleted);
+    } finally {
+      setIsUpdating(false);
     }
   };
-
-  const currentStyle = styles[variant];
 
   return (
     <li>
       <Link
         href={`/detail/${item.id}`}
-        className={`
-        flex items-center gap-4 px-3 py-2 rounded-full border-2 border-slate-900 w-full
-        ${currentStyle.background}
-      `}
+        className={`relative flex items-center gap-4 border-2 border-slate-900 rounded-3xl py-2 px-3 ${
+          item.isCompleted ? "bg-violet-100" : "bg-white"
+        }`}
       >
-        <div>
-          <input
-            type="checkbox"
-            id={`${variant}-${item.id}`}
-            checked={item.isCompleted}
-            onChange={() => {}}
-            className="sr-only"
-          />
-          <label
-            htmlFor={`${variant}-${item.id}`}
-            className={`check-btn ${currentStyle.checkboxBg} ${currentStyle.checkboxBorder}`}
-            onClick={(e) => handleCheckbox(item, e)}
-          >
-            {currentStyle.icon && (
-              <Image
-                src={currentStyle.icon}
-                alt="check"
-                width={32}
-                height={32}
-              />
-            )}
-          </label>
-        </div>
-        <span className={`flex-1 ${currentStyle.textStyle}`}>{item.name}</span>
+        <button
+          onClick={handleToggle}
+          disabled={isUpdating}
+          className={`check-btn ${
+            item.isCompleted ? "" : "border-2 border-slate-900 bg-yellow-50"
+          } ${isUpdating ? "opacity-50" : ""}`}
+          aria-label={item.isCompleted ? "완료 취소하기" : "완료하기"}
+        >
+          {item.isCompleted && (
+            <div className="bg-[url('/active/check.svg')] w-8 h-8 bg-no-repeat bg-center" />
+          )}
+          {isUpdating && (
+            <div className="absolute inset-0 flex items-center justify-center">
+              <div className="w-4 h-4 border-2 border-slate-500 border-t-transparent rounded-full animate-spin"></div>
+            </div>
+          )}
+        </button>
+        <span
+          className={`${item.isCompleted ? "line-through text-slate-500" : ""}`}
+        >
+          {item.name}
+        </span>
       </Link>
     </li>
   );

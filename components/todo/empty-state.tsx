@@ -6,7 +6,10 @@ interface EmptyStateProps {
 export default function EmptyState({ iconPath, message }: EmptyStateProps) {
   return (
     <div className="default-section">
-      <div className={`bg-[url('${iconPath}')] default-bg`}></div>
+      <div
+        className={`default-bg`}
+        style={{ backgroundImage: `url('${iconPath}')` }}
+      ></div>
       <h4 className="default-text">
         {message.split("\n").map((line, i) => (
           <span key={i}>
