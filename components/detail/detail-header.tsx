@@ -37,14 +37,19 @@ export default function DetailCheck({
             }`}
           >
             {isCompleted && (
-              <Image src="/check.svg" alt="check" width={32} height={32} />
+              <Image
+                src="/active/check.svg"
+                alt="check"
+                width={32}
+                height={32}
+              />
             )}
           </label>
         </div>
         <input
           value={name}
           onChange={(e) => onNameChange(e.target.value)}
-          className="text-xl font-bold text-slate-900 underline"
+          className="text-xl font-bold text-slate-900 underline text-center w-[300px]"
         />
       </div>
     </section>

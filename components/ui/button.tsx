@@ -26,18 +26,18 @@ export default function Button({
       {text === "추가하기" &&
         bgColor === "bg-violet-600" &&
         textColor === "text-white" && (
-          <span className="bg-[url('/white-plus.svg')] btn-image"></span>
+          <span className="bg-[url('/active/white-plus.svg')] btn-image"></span>
         )}
       {text === "추가하기" &&
         bgColor === "bg-slate-200" &&
         textColor === "text-slate-900" && (
-          <span className="bg-[url('/navy-plus.svg')] btn-image"></span>
+          <span className="bg-[url('/active/navy-plus.svg')] btn-image"></span>
         )}
       {text === "수정 완료" && (
-        <span className="bg-[url('/edit-check.svg')] btn-image"></span>
+        <span className="bg-[url('/active/edit-check.svg')] btn-image"></span>
       )}
       {text === "삭제하기" && (
-        <span className="bg-[url('/delete-x.svg')] btn-image"></span>
+        <span className="bg-[url('/active/delete-x.svg')] btn-image"></span>
       )}
       <span
         className={`font-bold ${textColor} ${

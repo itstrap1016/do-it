@@ -12,7 +12,6 @@ export function useTodoDetail(initialTodo: TodoItem) {
   const [status, setStatus] = useState({
     isEditLoading: false,
     isDeleteLoading: false,
-    wasEdited: false,
     error: null as string | null,
   });
   const { refreshTodos } = useTodos();

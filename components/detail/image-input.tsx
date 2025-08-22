@@ -1,4 +1,5 @@
 "use client";
+
 import { useState, useRef, useEffect } from "react";
 import Image from "next/image";
 import { todoAPI } from "@/app/lib/api";
@@ -26,7 +27,6 @@ export default function ImageInput({
   // 메모리 누수 방지를 위해 컴포넌트 언마운트 시 URL 객체 해제
   useEffect(() => {
     return () => {
-      // imageUrl과 previewImage가 다르면 로컬 객체 URL이므로 해제
       if (
         previewImage &&
         previewImage !== imageUrl &&
@@ -41,18 +41,7 @@ export default function ImageInput({
     const file = e.target.files?.[0];
     if (!file) return;
 
-    // 파일 유효성 검사
-    if (!/^[a-zA-Z0-9._-]+$/.test(file.name.split(".")[0])) {
-      alert("파일명은 영문자, 숫자, 점, 하이픈, 언더스코어만 허용됩니다.");
-      return;
-    }
-
-    if (file.size > 5 * 1024 * 1024) {
-      // 5MB
-      alert("파일 크기는 5MB 이하여야 합니다.");
-      return;
-    }
-
+    // 기존 로컬 URL 정리
     if (
       previewImage &&
       previewImage !== imageUrl &&
@@ -61,41 +50,46 @@ export default function ImageInput({
       URL.revokeObjectURL(previewImage);
     }
 
+    // 로컬 미리보기 설정
     const localPreview = URL.createObjectURL(file);
     setPreviewImage(localPreview);
     setIsUploading(true);
 
-    // API 호출
     try {
+      // 이미지 미리 로드 후 서버에 업로드
+      const preloadImage = new window.Image();
       const serverImageUrl = await todoAPI.uploadImage(file);
-      // 서버 URL이 유효한 경우에만 업데이트
-      if (serverImageUrl) {
-        const preloadImage = new window.Image();
-        preloadImage.src = serverImageUrl;
 
-        preloadImage.onload = () => {
-          // 이미지가 완전히 로드된 후에만 URL 전환
-          setPreviewImage(serverImageUrl);
-          onImageChange(serverImageUrl);
+      preloadImage.src = serverImageUrl;
+      preloadImage.onload = () => {
+        setPreviewImage(serverImageUrl);
+        onImageChange(serverImageUrl);
 
-          // 지연 후 로컬 URL 해제 (이미지 전환 완료 후)
-          setTimeout(() => {
-            URL.revokeObjectURL(localPreview);
-          }, 300);
-        };
-      }
+        // 지연 후 로컬 URL 해제
+        setTimeout(() => {
+          URL.revokeObjectURL(localPreview);
+        }, 300);
+      };
+
+      preloadImage.onerror = () => {
+        alert("서버 이미지 로드 실패");
+        onImageChange(localPreview);
+      };
     } catch (err) {
-      alert(err);
+      alert(
+        err instanceof Error ? err.message : "업로드 중 오류가 발생했습니다"
+      );
     } finally {
       setIsUploading(false);
     }
   };
 
+  // 실제 표시할 이미지 URL
   const displayImage = previewImage || imageUrl;
 
   return (
     <section
-      className={`w-[384px] h-[311px] rounded-3xl relative flex justify-center items-center ${
+      className={`w-[384px] h-[311px] rounded-3xl relative flex flex-col justify-center items-center image-fade flex-shrink-0 ${
         displayImage
           ? "bg-cover bg-center bg-no-repeat"
           : "border-2 border-dashed border-slate-300 bg-slate-50"
@@ -103,8 +97,19 @@ export default function ImageInput({
       style={displayImage ? { backgroundImage: `url(${displayImage})` } : {}}
     >
       {!displayImage && !isUploading && (
-        <Image src="/photo.svg" alt="photo" width={64} height={64} />
+        <Image src="/active/photo.svg" alt="photo" width={64} height={64} />
       )}
+
+      {/* 업로드 중 오버레이 */}
+      {isUploading && (
+        <div className="absolute inset-0 bg-black/30 flex items-center justify-center rounded-3xl">
+          <div className="bg-white p-4 rounded-lg shadow-lg flex flex-col items-center">
+            <div className="w-8 h-8 border-4 border-violet-500 border-t-transparent rounded-full animate-spin"></div>
+            <p className="mt-2 text-sm">업로드 중...</p>
+          </div>
+        </div>
+      )}
+
       <div className="bottom-4 right-4 absolute">
         <input
           type="file"
@@ -122,7 +127,12 @@ export default function ImageInput({
               isUploading ? "opacity-50 cursor-not-allowed" : ""
             }`}
           >
-            <Image src="/navy-plus-big.svg" alt="plus" width={24} height={24} />
+            <Image
+              src="/active/navy-plus-big.svg"
+              alt="plus"
+              width={24}
+              height={24}
+            />
           </label>
         ) : (
           <label
@@ -132,7 +142,7 @@ export default function ImageInput({
             }`}
           >
             <Image
-              src="/edit-pencil.svg"
+              src="/active/edit-pencil.svg"
               alt="edit-image"
               width={24}
               height={24}

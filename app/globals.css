@@ -43,4 +43,16 @@ body {
   .check-btn {
     @apply flex items-center justify-center w-8 h-8 rounded-full cursor-pointer;
   }
+  .memo-textarea {
+    @apply rounded-xl outline-none resize-none text-slate-800 w-full h-[calc(100%-40px)] pr-0.5;
+  }
+  .memo-textarea::-webkit-scrollbar {
+    @apply w-1;
+  }
+  .memo-textarea::-webkit-scrollbar-track {
+    @apply bg-transparent rounded-sm;
+  }
+  .memo-textarea::-webkit-scrollbar-thumb {
+    @apply bg-amber-200 rounded-sm;
+  }
 }

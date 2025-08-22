@@ -1,7 +1,6 @@
-// app/detail/[id]/page.tsx
-import TodoDetailForm from "@/components/todo-detail-form";
 import { todoAPI } from "@/app/lib/api";
 import { notFound } from "next/navigation";
+import TodoDetailContainer from "./todo-detail-container";
 
 interface DetailPageParams {
   params: {
@@ -10,25 +9,17 @@ interface DetailPageParams {
 }
 
 export default async function DetailPage({ params }: DetailPageParams) {
-  const resolvedParams = await params;
-  const id = Number(resolvedParams.id);
-
-  // 서버에서 데이터 가져오기
   try {
+    const id = Number(params.id);
     const todo = await todoAPI.getTodoById(id);
 
     if (!todo) {
-      notFound(); // 404 페이지로 리디렉션
+      notFound();
     }
 
-    return <TodoDetailForm initialTodo={todo} />;
+    return <TodoDetailContainer initialTodo={todo} />;
   } catch (error) {
-    // 오류 처리
-    console.error(error);
-    return (
-      <div className="text-center py-4 text-bold text-slate-800">
-        Todo를 불러오는 중 오류가 발생했습니다.
-      </div>
-    );
+    console.error("Todo 상세 정보 로드 오류:", error);
+    return <div>Todo를 불러오는 중 오류가 발생했습니다.</div>;
   }
 }
