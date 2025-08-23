@@ -29,6 +29,8 @@ src/
 │   ├── home/
 │   │   └── todo-container.tsx   # 홈페이지 컨테이너
 │   ├── hooks/                   # 커스텀 훅
+│   │   ├── use-image-preview.ts # 미리보기 이미지 관리 훅
+│   │   ├── use-image-upload.ts  # 이미지 업로드 관리 훅
 │   │   ├── use-todos.ts         # Todo 목록 관리 훅
 │   │   └── use-todo-detail.ts   # Todo 상세 관리 훅
 │   ├── lib/
