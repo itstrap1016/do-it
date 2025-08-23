@@ -3,11 +3,9 @@ import { notFound } from "next/navigation";
 import TodoDetailContainer from "./todo-detail-container";
 
 interface DetailPageParams {
-  params: {
-    id: Promise<{
-      id: string;
-    }>;
-  };
+  params: Promise<{
+    id: string;
+  }>;
 }
 
 export default async function DetailPage({ params }: DetailPageParams) {
