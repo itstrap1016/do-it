@@ -1,6 +1,6 @@
 # Todo List Application
 
-현대적인 Todo 관리 애플리케이션입니다. Next.js 15와 TypeScript를 사용하여 구축되었으며.
+현대적인 Todo 관리 애플리케이션입니다. Next.js 15와 TypeScript를 사용하여 구축하였습니다.
 
 ## 🚀 주요 기능
 
