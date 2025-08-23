@@ -1,3 +1,5 @@
+// Todo 목록 관리를 위한 커스텀 훅
+// SWR을 사용하여 데이터 페칭, 캐싱, 리페칭을 처리합니다.
 "use client";
 
 import { useState } from "react";
@@ -56,8 +58,10 @@ export function useTodos() {
       getting: isLoading,
     },
     error,
-    addTodo,
-    refreshTodos,
-    updateTodo,
+    actions: {
+      addTodo,
+      refreshTodos,
+      updateTodo,
+    },
   };
 }

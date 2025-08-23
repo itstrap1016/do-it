@@ -1,3 +1,13 @@
+/**
+ * Todo 목록의 상태 관리와 비즈니스 로직을 담당합니다.
+ *
+ * 책임:
+ * - Todo 데이터 페칭 및 상태 관리
+ * - Todo 추가/수정 로직 처리
+ * - 완료/미완료 Todo 필터링
+ * - 자식 컴포넌트들에게 데이터와 핸들러 전달
+ */
+
 "use client";
 
 import { useTodos } from "@/app/hooks/use-todos";
@@ -5,14 +15,14 @@ import TodoForm from "@/components/todo/todo-form";
 import TodoListView from "@/components/todo/todo-list-view";
 
 export default function TodoContainer() {
-  const { todos, loading, addTodo, updateTodo } = useTodos();
+  const { todos, loading, actions } = useTodos();
   const pendingTodos = todos.filter((todo) => !todo.isCompleted);
   const completedTodos = todos.filter((todo) => todo.isCompleted);
 
   const handleAddTodo = async (name: string): Promise<boolean> => {
     if (!name.trim()) return false;
     try {
-      await addTodo({ name: name.trim() });
+      await actions.addTodo({ name: name.trim() });
       return true;
     } catch (err) {
       const errorMessage =
@@ -24,7 +34,7 @@ export default function TodoContainer() {
 
   const handleToggleTodo = async (id: number, isCompleted: boolean) => {
     try {
-      await updateTodo(id, { isCompleted });
+      await actions.updateTodo(id, { isCompleted });
       return true;
     } catch (err) {
       const errorMessage =

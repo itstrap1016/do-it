@@ -1,20 +1,24 @@
-// 새로 추가된 상세 페이지를 위한 훅
+// Todo 상세 페이지에서 사용하는 커스텀 훅
+// 개별 Todo의 수정, 삭제 등의 기능을 관리합니다.
 "use client";
 
 import { useState } from "react";
-import { useRouter } from "next/navigation";
 import { TodoItem, todoAPI } from "@/app/lib/api";
 import { useTodos } from "./use-todos";
 
+interface ReturnObject {
+  success?: boolean;
+  error?: string;
+}
+
 export function useTodoDetail(initialTodo: TodoItem) {
-  const router = useRouter();
   const [todoData, setTodoData] = useState(initialTodo);
   const [status, setStatus] = useState({
     isEditLoading: false,
     isDeleteLoading: false,
     error: null as string | null,
   });
-  const { refreshTodos } = useTodos();
+  const { actions } = useTodos();
 
   // 개별 필드 업데이트 핸들러
   const updateField = (field: keyof TodoItem, value: string | boolean) => {
@@ -30,11 +34,10 @@ export function useTodoDetail(initialTodo: TodoItem) {
   };
 
   // 수정 로직
-  const handleUpdate = async () => {
+  const updateTodo = async (): Promise<ReturnObject | void> => {
     const validationError = validateTodo();
     if (validationError) {
-      alert(validationError);
-      return;
+      return { success: false, error: validationError };
     }
 
     setStatus((prev) => ({ ...prev, isEditLoading: true, error: null }));
@@ -45,32 +48,30 @@ export function useTodoDetail(initialTodo: TodoItem) {
         memo: todoData.memo || "",
         imageUrl: todoData.imageUrl || "",
       });
-      await refreshTodos();
-      router.push("/");
+      await actions.refreshTodos();
+      return { success: true };
     } catch (err) {
       const errorMessage =
         err instanceof Error ? err.message : "수정 중 오류가 발생했습니다";
       setStatus((prev) => ({ ...prev, error: errorMessage }));
-      alert(errorMessage);
+      return { success: false, error: errorMessage };
     } finally {
       setStatus((prev) => ({ ...prev, isEditLoading: false }));
     }
   };
 
   // 삭제 로직
-  const handleDelete = async () => {
-    if (!confirm("정말 삭제하시겠습니까?")) return;
-
+  const deleteTodo = async (): Promise<ReturnObject> => {
     setStatus((prev) => ({ ...prev, isDeleteLoading: true, error: null }));
     try {
       await todoAPI.deleteTodo(todoData.id);
-      await refreshTodos();
-      router.push("/");
+      await actions.refreshTodos();
+      return { success: true };
     } catch (err) {
       const errorMessage =
         err instanceof Error ? err.message : "삭제 중 오류가 발생했습니다";
       setStatus((prev) => ({ ...prev, error: errorMessage }));
-      alert(errorMessage);
+      return { success: false, error: errorMessage };
     } finally {
       setStatus((prev) => ({ ...prev, isDeleteLoading: false }));
     }
@@ -80,7 +81,9 @@ export function useTodoDetail(initialTodo: TodoItem) {
     todoData,
     updateField,
     status,
-    handleUpdate,
-    handleDelete,
+    actions: {
+      updateTodo,
+      deleteTodo,
+    },
   };
 }

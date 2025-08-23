@@ -1,6 +1,7 @@
 const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL;
 const API_ID = process.env.NEXT_PUBLIC_API_ID;
 
+// Todo 아이템의 기본 구조를 정의하는 인터페이스
 export interface TodoItem {
   id: number;
   name: string;
@@ -10,10 +11,12 @@ export interface TodoItem {
   imageUrl?: string;
 }
 
+// 새로운 Todo 생성 시 사용하는 요청 데이터 구조
 export interface CreateTodoRequest {
   name: string;
 }
 
+// Todo 업데이트 시 사용하는 요청 데이터 구조
 export interface UpdateTodoRequest {
   name?: string;
   isCompleted?: boolean;

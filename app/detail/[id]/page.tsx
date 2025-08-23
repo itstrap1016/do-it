@@ -4,7 +4,9 @@ import TodoDetailContainer from "./todo-detail-container";
 
 interface DetailPageParams {
   params: {
-    id: string;
+    id: Promise<{
+      id: string;
+    }>;
   };
 }
 
