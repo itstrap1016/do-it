@@ -1,5 +1,6 @@
 // Todo 목록 관리를 위한 커스텀 훅
 // SWR을 사용하여 데이터 페칭, 캐싱, 리페칭을 처리합니다.
+
 "use client";
 
 import { useState } from "react";
@@ -21,7 +22,7 @@ export function useTodos() {
     mutate: refreshTodos,
   } = useSWR(TODOS_KEY, todoAPI.getTodos);
 
-  // 할 일 추가 함수
+  // Todo 추가 함수
   const addTodo = async (data: CreateTodoRequest) => {
     try {
       setActionLoading((prev) => ({ ...prev, adding: true }));
@@ -36,7 +37,7 @@ export function useTodos() {
     }
   };
 
-  // 할 일 업데이트 함수
+  // Todo 업데이트 함수
   const updateTodo = async (id: number, data: UpdateTodoRequest) => {
     try {
       const updatedTodo = await todoAPI.updateTodo(id, data);

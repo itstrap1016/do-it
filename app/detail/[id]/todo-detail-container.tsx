@@ -15,6 +15,7 @@ export default function TodoDetailContainer({
   const router = useRouter();
   const { todoData, updateField, status, actions } = useTodoDetail(initialTodo);
 
+  // Todo 업데이트 처리
   const handleUpdate = async () => {
     const result = await actions.updateTodo();
 
@@ -25,6 +26,7 @@ export default function TodoDetailContainer({
     }
   };
 
+  // Todo 삭제 처리
   const handleDelete = async () => {
     if (!confirm("정말 삭제하시겠습니까?")) return;
 

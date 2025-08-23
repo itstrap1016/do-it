@@ -47,23 +47,23 @@ async function apiRequest<T>(url: string, options?: RequestInit): Promise<T> {
 
 // Todo 관련 API 함수들
 export const todoAPI = {
-  // 할 일 추가
+  // Todo 추가
   createTodo: (data: CreateTodoRequest): Promise<TodoItem> =>
     apiRequest(`/${API_ID}/items`, {
       method: "POST",
       body: JSON.stringify(data),
     }),
 
-  // 할 일 목록 조회
+  // Todo 목록 조회
   getTodos: (): Promise<TodoItem[]> => apiRequest(`/${API_ID}/items`),
 
-  // 할 일 삭제
+  // Todo 삭제
   deleteTodo: (id: number): Promise<void> =>
     apiRequest(`/${API_ID}/items/${id}`, {
       method: "DELETE",
     }),
 
-  // 할 일 업데이트 추가
+  // Todo 업데이트 추가
   updateTodo: (id: number, data: UpdateTodoRequest): Promise<TodoItem> =>
     apiRequest(`/${API_ID}/items/${id}`, {
       method: "PATCH",

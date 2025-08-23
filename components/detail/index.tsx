@@ -25,7 +25,7 @@ export default function TodoDetailView({
   return (
     <section className="w-full min-h-[calc(100vh-60px)] py-6 px-[102px] bg-white max-[1248px]:px-6 max-sm:p-4">
       <h2 className="sr-only">ToDo 상세 페이지</h2>
-
+      {/* Todo 상세 상태 */}
       <DetailHeader
         name={todoData.name}
         isCompleted={todoData.isCompleted}
@@ -34,14 +34,14 @@ export default function TodoDetailView({
           updateField("isCompleted", isCompleted)
         }
       />
-
+      {/* Todo 상세 이미지 업로드 및 메모 */}
       <DetailContent
         imageUrl={todoData.imageUrl}
         memo={todoData.memo || ""}
         onImageChange={(url) => updateField("imageUrl", url)}
         onMemoChange={(memo) => updateField("memo", memo)}
       />
-
+      {/* Todo 상세 수정 완료 및 삭제 버튼 */}
       <DetailActions
         isEditLoading={status.isEditLoading}
         isDeleteLoading={status.isDeleteLoading}

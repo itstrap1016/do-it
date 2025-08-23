@@ -11,6 +11,7 @@ interface TodoFormProps {
 export default function TodoForm({ onSubmit, isLoading }: TodoFormProps) {
   const [inputValue, setInputValue] = useState("");
 
+  // 폼 제출 처리
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!inputValue.trim()) return;

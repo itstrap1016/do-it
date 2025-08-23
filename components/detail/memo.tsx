@@ -1,4 +1,3 @@
-// 기존의 memo.tsx를 detail 폴더로 이동
 "use client";
 
 import { useState } from "react";

@@ -1,13 +1,3 @@
-/**
- * Todo 목록의 상태 관리와 비즈니스 로직을 담당합니다.
- *
- * 책임:
- * - Todo 데이터 페칭 및 상태 관리
- * - Todo 추가/수정 로직 처리
- * - 완료/미완료 Todo 필터링
- * - 자식 컴포넌트들에게 데이터와 핸들러 전달
- */
-
 "use client";
 
 import { useTodos } from "@/app/hooks/use-todos";
@@ -16,9 +6,11 @@ import TodoListView from "@/components/todo/todo-list-view";
 
 export default function TodoContainer() {
   const { todos, loading, actions } = useTodos();
+  // Todo 상태별 필터링
   const pendingTodos = todos.filter((todo) => !todo.isCompleted);
   const completedTodos = todos.filter((todo) => todo.isCompleted);
 
+  // 새로운 Todo 추가 처리
   const handleAddTodo = async (name: string): Promise<boolean> => {
     if (!name.trim()) return false;
     try {
@@ -32,6 +24,7 @@ export default function TodoContainer() {
     }
   };
 
+  //  Todo 상태 토글 처리
   const handleToggleTodo = async (id: number, isCompleted: boolean) => {
     try {
       await actions.updateTodo(id, { isCompleted });
@@ -46,11 +39,12 @@ export default function TodoContainer() {
 
   return (
     <section className="max-[1248px]:px-6 max-sm:px-4">
+      {/* Todo 추가 폼 */}
       <TodoForm onSubmit={handleAddTodo} isLoading={loading.adding} />
 
       <section className="flex gap-6 max-md:flex-col max-md:pb-6 max-md:gap-12">
         <h2 className="sr-only">To Do, Done 리스트</h2>
-
+        {/* 미완료 Todo 목록 */}
         <TodoListView
           title="todo"
           todos={pendingTodos}
@@ -61,7 +55,7 @@ export default function TodoContainer() {
             text: "할 일이 없어요.\nTODO를 새롭게 추가해주세요!",
           }}
         />
-
+        {/* 완료된 Todo 목록 */}
         <TodoListView
           title="done"
           todos={completedTodos}
