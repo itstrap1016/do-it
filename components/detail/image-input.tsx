@@ -9,6 +9,48 @@ interface ImageInputProps {
   onImageChange: (url: string) => void;
 }
 
+const validateFile = (file: File): { isValid: boolean; error?: string } => {
+  // 1. 파일명 영어 검증 (확장자 제외)
+  const fileName = file.name;
+  const fileNameWithoutExt =
+    fileName.substring(0, fileName.lastIndexOf(".")) || fileName;
+  const englishOnlyRegex = /^[a-zA-Z0-9\s\-_]+$/;
+
+  if (!englishOnlyRegex.test(fileNameWithoutExt)) {
+    return {
+      isValid: false,
+      error: "파일명은 영어, 숫자, 하이픈(-), 언더스코어(_)만 사용 가능합니다.",
+    };
+  }
+
+  // 2. 파일 크기 검증 (5MB = 5 * 1024 * 1024 bytes)
+  const maxSize = 5 * 1024 * 1024; //
+  if (file.size > maxSize) {
+    const fileSizeMB = (file.size / (1024 * 1024)).toFixed(2);
+    return {
+      isValid: false,
+      error: `파일 크기가 너무 큽니다. (현재: ${fileSizeMB}MB, 최대: 5MB)`,
+    };
+  }
+
+  // 3. 파일 타입 검증 (이미지만 허용)
+  const allowedTypes = [
+    "image/jpeg",
+    "image/jpg",
+    "image/png",
+    "image/gif",
+    "image/webp",
+  ];
+  if (!allowedTypes.includes(file.type)) {
+    return {
+      isValid: false,
+      error: "지원하지 않는 파일 형식입니다. (JPG, PNG, GIF, WebP만 가능)",
+    };
+  }
+
+  return { isValid: true };
+};
+
 export default function ImageInput({
   imageUrl,
   onImageChange,
@@ -40,6 +82,16 @@ export default function ImageInput({
   const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (!file) return;
+
+    // 파일 유효성 검증
+    const validation = validateFile(file);
+    if (!validation.isValid) {
+      alert(validation.error);
+      if (fileInputRef.current) {
+        fileInputRef.current.value = "";
+      }
+      return;
+    }
 
     // 기존 로컬 URL 정리
     if (
