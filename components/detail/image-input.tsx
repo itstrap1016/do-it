@@ -1,138 +1,50 @@
 "use client";
 
-import { useState, useRef, useEffect } from "react";
+import { useRef } from "react";
 import Image from "next/image";
-import { todoAPI } from "@/app/lib/api";
+import { useImageUpload } from "@/app/hooks/use-image-upload";
+import { useImagePreview } from "@/app/hooks/use-image-preview";
 
 interface ImageInputProps {
   imageUrl?: string;
   onImageChange: (url: string) => void;
+  onImageError: (error: string) => void;
 }
-
-const validateFile = (file: File): { isValid: boolean; error?: string } => {
-  // 1. 파일명 영어 검증 (확장자 제외)
-  const fileName = file.name;
-  const fileNameWithoutExt =
-    fileName.substring(0, fileName.lastIndexOf(".")) || fileName;
-  const englishOnlyRegex = /^[a-zA-Z0-9\s\-_]+$/;
-
-  if (!englishOnlyRegex.test(fileNameWithoutExt)) {
-    return {
-      isValid: false,
-      error: "파일명은 영어, 숫자, 하이픈(-), 언더스코어(_)만 사용 가능합니다.",
-    };
-  }
-
-  // 2. 파일 크기 검증 (5MB = 5 * 1024 * 1024 bytes)
-  const maxSize = 5 * 1024 * 1024; //
-  if (file.size > maxSize) {
-    const fileSizeMB = (file.size / (1024 * 1024)).toFixed(2);
-    return {
-      isValid: false,
-      error: `파일 크기가 너무 큽니다. (현재: ${fileSizeMB}MB, 최대: 5MB)`,
-    };
-  }
-
-  // 3. 파일 타입 검증 (이미지만 허용)
-  const allowedTypes = [
-    "image/jpeg",
-    "image/jpg",
-    "image/png",
-    "image/gif",
-    "image/webp",
-  ];
-  if (!allowedTypes.includes(file.type)) {
-    return {
-      isValid: false,
-      error: "지원하지 않는 파일 형식입니다. (JPG, PNG, GIF, WebP만 가능)",
-    };
-  }
-
-  return { isValid: true };
-};
 
 export default function ImageInput({
   imageUrl,
   onImageChange,
+  onImageError,
 }: ImageInputProps) {
-  const [isUploading, setIsUploading] = useState(false);
-  const [previewImage, setPreviewImage] = useState<string | null>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
-
-  // 컴포넌트 초기화 시 외부에서 받은 이미지URL을 미리보기로 설정
-  useEffect(() => {
-    if (imageUrl) {
-      setPreviewImage(imageUrl);
-    }
-  }, [imageUrl]);
-
-  // 메모리 누수 방지를 위해 컴포넌트 언마운트 시 URL 객체 해제
-  useEffect(() => {
-    return () => {
-      if (
-        previewImage &&
-        previewImage !== imageUrl &&
-        previewImage.startsWith("blob:")
-      ) {
-        URL.revokeObjectURL(previewImage);
-      }
-    };
-  }, [previewImage, imageUrl]);
+  const { isUploading, actions: uploadActions } = useImageUpload();
+  const { previewImage, actions: previewActions } = useImagePreview(imageUrl);
 
   const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (!file) return;
 
-    // 파일 유효성 검증
-    const validation = validateFile(file);
-    if (!validation.isValid) {
-      alert(validation.error);
-      if (fileInputRef.current) {
-        fileInputRef.current.value = "";
+    // 로컬 미리보기 즉시 설정
+    const localBlobUrl = previewActions.setPreviewFromFile(file);
+
+    // 업로드 처리
+    const result = await uploadActions.uploadImage(file);
+
+    if (result.success && result.url) {
+      // 성공: 서버 이미지로 교체
+      previewActions.setPreviewFromUrl(result.url, localBlobUrl);
+      onImageChange(result.url);
+    } else {
+      // 실패: 원래 상태로 복구
+      previewActions.clearPreview();
+      if (result.error) {
+        onImageError(result.error);
       }
-      return;
     }
 
-    // 기존 로컬 URL 정리
-    if (
-      previewImage &&
-      previewImage !== imageUrl &&
-      previewImage.startsWith("blob:")
-    ) {
-      URL.revokeObjectURL(previewImage);
-    }
-
-    // 로컬 미리보기 설정
-    const localPreview = URL.createObjectURL(file);
-    setPreviewImage(localPreview);
-    setIsUploading(true);
-
-    try {
-      // 이미지 미리 로드 후 서버에 업로드
-      const preloadImage = new window.Image();
-      const serverImageUrl = await todoAPI.uploadImage(file);
-
-      preloadImage.src = serverImageUrl;
-      preloadImage.onload = () => {
-        setPreviewImage(serverImageUrl);
-        onImageChange(serverImageUrl);
-
-        // 지연 후 로컬 URL 해제
-        setTimeout(() => {
-          URL.revokeObjectURL(localPreview);
-        }, 300);
-      };
-
-      preloadImage.onerror = () => {
-        alert("서버 이미지 로드 실패");
-        onImageChange(localPreview);
-      };
-    } catch (err) {
-      alert(
-        err instanceof Error ? err.message : "업로드 중 오류가 발생했습니다"
-      );
-    } finally {
-      setIsUploading(false);
+    // 파일 입력 초기화
+    if (fileInputRef.current) {
+      fileInputRef.current.value = "";
     }
   };
 

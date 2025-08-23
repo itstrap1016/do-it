@@ -6,6 +6,7 @@ interface DetailContentProps {
   memo: string;
   onImageChange: (url: string) => void;
   onMemoChange: (memo: string) => void;
+  onImageError: (error: string) => void;
 }
 
 export default function DetailContent({
@@ -13,11 +14,16 @@ export default function DetailContent({
   memo,
   onImageChange,
   onMemoChange,
+  onImageError,
 }: DetailContentProps) {
   return (
     <section className="flex gap-6 mt-6 max-[1248px]:justify-center max-lg:flex-col max-sm:mt-4 max-sm:gap-4">
       <h2 className="sr-only">수정 콘텐츠</h2>
-      <ImageInput imageUrl={imageUrl} onImageChange={onImageChange} />
+      <ImageInput
+        imageUrl={imageUrl}
+        onImageChange={onImageChange}
+        onImageError={onImageError}
+      />
       <Memo memo={memo} onMemoChange={onMemoChange} />
     </section>
   );

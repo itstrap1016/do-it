@@ -39,6 +39,11 @@ export default function TodoDetailContainer({
     }
   };
 
+  // 이미지 업로드 에러 처리
+  const handleImageError = (error: string) => {
+    alert(`이미지 업로드 실패: ${error}`);
+  };
+
   return (
     <TodoDetailView
       todoData={todoData}
@@ -46,6 +51,7 @@ export default function TodoDetailContainer({
       status={status}
       onUpdate={handleUpdate}
       onDelete={handleDelete}
+      onImageError={handleImageError}
     />
   );
 }
