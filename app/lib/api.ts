@@ -1,5 +1,5 @@
-const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL;
-const API_ID = process.env.NEXT_PUBLIC_API_ID;
+const BASE_URL = "https://assignment-todolist-api.vercel.app/api";
+const API_ID = "itstrap2";
 
 // Todo 아이템의 기본 구조를 정의하는 인터페이스
 export interface TodoItem {
